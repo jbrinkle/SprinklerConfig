@@ -1,0 +1,41 @@
+﻿<Window x:Class="SprinklerConfig.TestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SprinklerConfig"
+        xmlns:viewModels="clr-namespace:SprinklerConfig.ViewModel"
+        mc:Ignorable="d"
+        Background="#444466"
+        Title="Test Window" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,20,0,0">
+            <ListView  x:Name="MainList" 
+              ItemsSource="{Binding Controllers, Mode=OneWay}"  
+              SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" 
+              MinWidth="250" MinHeight="200" Margin="5">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <!--<Button Content="Add" Click="{x:Bind  Organization.Add}" Margin="5"/>-->
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0,20,0,0">
+            <TextBox 
+              Text="{Binding SelectedController.Name, Mode=TwoWay, FallbackValue=''}" 
+              Margin="5" />
+            <TextBox 
+              Text="{Binding SelectedController.Description, Mode=TwoWay, FallbackValue='0'}" 
+              Margin="5" />
+            <!--<Button Content="Delete" Click="{x:Bind Organization.Delete}" Margin="5" />-->
+        </StackPanel>
+    </Grid>
+</Window>
