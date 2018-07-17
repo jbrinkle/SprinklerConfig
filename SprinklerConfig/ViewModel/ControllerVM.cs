@@ -12,23 +12,12 @@ namespace SprinklerConfig.ViewModel
     internal class ControllerVM : ObservableObject
     {
         private readonly Controller controller;
-        private readonly ICommand zoneCountIncrement;
-        private readonly ICommand zoneCountDecrement;
-        private readonly ICommand zoneCountSet;
+        private ObservableCollection<Zone> zones;
 
+        /// <summary>
+        /// Gets the underlying controller model
+        /// </summary>
         public Controller Controller => controller;
-
-        public ControllerVM() : this(new Controller())
-        { }
-
-        public ControllerVM(Controller model)
-        {
-            controller = model;
-
-            zoneCountIncrement = new DelegateCommand(() => SetZoneCount(1, true));
-            zoneCountDecrement = new DelegateCommand(() => SetZoneCount(-1, true));
-            zoneCountSet = new DelegateCommand<int>(i => SetZoneCount(i, false));
-        }
 
         /// <summary>
         /// Gets or sets the name of the controller
@@ -62,8 +51,6 @@ namespace SprinklerConfig.ViewModel
             }
         }
 
-        private ObservableCollection<Zone> zones;
-
         /// <summary>
         /// Gets the list of zones
         /// </summary>
@@ -76,9 +63,32 @@ namespace SprinklerConfig.ViewModel
             }
         }
 
-        public ICommand ZoneCountIncrementCommand => zoneCountIncrement;
-        public ICommand ZoneCountDecrementCommand => zoneCountDecrement;
-        public ICommand ZoneCountSetCommand => zoneCountSet;
+        /// <summary>
+        /// Command to increment the zone count
+        /// </summary>
+        public ICommand ZoneCountIncrement { get; }
+
+        /// <summary>
+        /// Command to decrement the zone count
+        /// </summary>
+        public ICommand ZoneCountDecrement { get; }
+
+        /// <summary>
+        /// Command to set the zone count
+        /// </summary>
+        public ICommand ZoneCountSet { get; }
+
+        public ControllerVM() : this(new Controller())
+        { }
+
+        public ControllerVM(Controller model)
+        {
+            controller = model;
+
+            ZoneCountIncrement = new DelegateCommand(() => SetZoneCount(1, true));
+            ZoneCountDecrement = new DelegateCommand(() => SetZoneCount(-1, true));
+            ZoneCountSet = new DelegateCommand<int>(i => SetZoneCount(i, false));
+        }
 
         private void SetZoneCount(int count, bool isRelative = false)
         {

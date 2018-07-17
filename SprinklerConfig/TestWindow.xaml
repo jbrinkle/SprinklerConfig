@@ -50,8 +50,8 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button Content="Add zone" Command="{Binding SelectedController.ZoneCountIncrementCommand}"/>
-            <Button Content="Rem zone" Command="{Binding SelectedController.ZoneCountDecrementCommand}"/>
+            <Button Content="Add zone" Command="{Binding SelectedController.ZoneCountIncrement}"/>
+            <Button Content="Rem zone" Command="{Binding SelectedController.ZoneCountDecrement}"/>
             <TextBox x:Name="ZoneCount"
                      Text="{Binding SelectedController.Zones.Count, Mode=OneWay}"
                      LostFocus="TextBox_LostFocus"/>

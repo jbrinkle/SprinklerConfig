@@ -31,7 +31,7 @@ namespace SprinklerConfig
         {
             var vm = ((PropertyVM)DataContext).SelectedController;
 
-            vm?.ZoneCountSetCommand.Execute(int.Parse(ZoneCount.Text));
+            vm?.ZoneCountSet.Execute(int.Parse(ZoneCount.Text));
         }
     }
 }
