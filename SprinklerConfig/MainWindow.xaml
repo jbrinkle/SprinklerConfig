@@ -3,12 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="clr-namespace:SprinklerConfig.Views.Converters"
         xmlns:local="clr-namespace:SprinklerConfig"
         mc:Ignorable="d"
         Title="Sprinkler Configurator" Height="550" Width="800"
         MinHeight="450" MinWidth="800">
     <Window.Resources>
         <ImageBrush x:Key="sprinklerbg" ImageSource="/SprinklerConfig;component/Resources/sprinklerbg.jpg" Opacity=".3" Stretch="UniformToFill"/>
+
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
 
         <Style x:Key="WhiteText"
                TargetType="TextBlock">
@@ -46,6 +49,26 @@
                     Value="#55CCEEAA"/>
             <Setter Property="Foreground"
                     Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border"
+                                BorderThickness="1"
+                                BorderBrush="#888"
+                                CornerRadius="5"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Name="content"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="border" Property="Background" Value="#33CCEEAA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
     
@@ -81,15 +104,24 @@
                 <!-- CONTROLLER DETAILS -->
                 <StackPanel x:Name="ControllerDetails"
                             Margin="10">
+                    <CheckBox x:Name="editController"
+                              HorizontalAlignment="Right">
+                        <TextBlock Text="Edit" Style="{StaticResource WhiteText}"/>
+                    </CheckBox>
                     <TextBlock Text="Controller Name" Style="{StaticResource WhiteText}"/>
-                    <TextBox x:Name="ControllerName" Style="{StaticResource DataEntry}"></TextBox>
+                    <TextBox x:Name="ControllerName"
+                             Style="{StaticResource DataEntry}"
+                             IsReadOnly="{Binding IsChecked, ElementName=editController, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}"
+                             Text="{Binding SelectedController.Name, Mode=TwoWay}"/>
 
                     <TextBlock Text="Description" Style="{StaticResource WhiteText}"/>
                     <TextBox x:Name="ControllerDescription" Style="{StaticResource DataEntry}"
                              MinLines="6"
                              MaxLines="10"
                              TextWrapping="Wrap"
-                             VerticalScrollBarVisibility="Auto"></TextBox>
+                             VerticalScrollBarVisibility="Auto"
+                             IsReadOnly="{Binding IsChecked, ElementName=editController, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}"
+                             Text="{Binding SelectedController.Description, Mode=TwoWay}" />
 
                     <TextBlock Text="Zone count" Style="{StaticResource WhiteText}"/>
                     <Grid Margin="0,0,0,5">
@@ -98,14 +130,21 @@
                             <ColumnDefinition Width="35"/>
                             <ColumnDefinition Width="35"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="ControllerZoneCount" Style="{StaticResource DataEntry}"
-                                 Margin="0"></TextBox>
+                        <TextBox x:Name="ControllerZoneCount"
+                                 Style="{StaticResource DataEntry}"
+                                 Margin="0"
+                                 IsReadOnly="{Binding IsChecked, ElementName=editController, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}"
+                                 Text="{Binding SelectedController.Zones.Count, Mode=OneWay}"/>
                         <Button Grid.Column="1"
+                                Style="{StaticResource GreenButton}"
                                 Margin="5,0,0,0"
-                                Style="{StaticResource GreenButton}">+</Button>
+                                IsEnabled="{Binding IsChecked, ElementName=editController, Mode=OneWay}"
+                                Command="{Binding SelectedController.ZoneCountIncrement}">+</Button>
                         <Button Grid.Column="2"
+                                Style="{StaticResource GreenButton}"
                                 Margin="5,0,0,0"
-                                Style="{StaticResource GreenButton}">-</Button>
+                                IsEnabled="{Binding IsChecked, ElementName=editController, Mode=OneWay}"
+                                Command="{Binding SelectedController.ZoneCountDecrement}">-</Button>
                     </Grid>
 
                     <TextBlock Text="Program count" Style="{StaticResource WhiteText}"/>
@@ -115,14 +154,18 @@
                             <ColumnDefinition Width="35"/>
                             <ColumnDefinition Width="35"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="ControllerProgramCount" Style="{StaticResource DataEntry}"
-                                 Margin="0"></TextBox>
+                        <TextBox x:Name="ControllerProgramCount"
+                                 Style="{StaticResource DataEntry}"
+                                 Margin="0"
+                                 IsReadOnly="{Binding IsChecked, ElementName=editController, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}"/>
                         <Button Grid.Column="1"
+                                Style="{StaticResource GreenButton}"
                                 Margin="5,0,0,0"
-                                Style="{StaticResource GreenButton}">+</Button>
+                                IsEnabled="{Binding IsChecked, ElementName=editController, Mode=OneWay}">+</Button>
                         <Button Grid.Column="2"
+                                Style="{StaticResource GreenButton}"
                                 Margin="5,0,0,0"
-                                Style="{StaticResource GreenButton}">-</Button>
+                                IsEnabled="{Binding IsChecked, ElementName=editController, Mode=OneWay}">-</Button>
                     </Grid>
                 </StackPanel>
 
@@ -145,31 +188,41 @@
                         </TabItem.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" MinWidth="200" MaxWidth="400"/>
+                                <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
 
                             <ListBox x:Name="ZoneListBox"
                                      Style="{StaticResource ListEntries}"
                                      Margin="5"
-                                     ScrollViewer.VerticalScrollBarVisibility="Auto">
-                                <ListBoxItem>#1 - Superman</ListBoxItem>
-                                <ListBoxItem IsSelected="True">#2 - Batman</ListBoxItem>
-                                <ListBoxItem>#3 - Flash</ListBoxItem>
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     ItemsSource="{Binding SelectedController.Zones, Mode=OneWay}"
+                                     SelectedIndex="{Binding SelectedController.SelectedZoneIndex, Mode=TwoWay}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="0,0,8,0" Text="{Binding ID, Mode=OneWay}"/>
+                                            <TextBlock Margin="0" Text="{Binding Name, Mode=OneWay}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
                             </ListBox>
 
                             <StackPanel x:Name="ZoneDetails"
                                         Grid.Column="1"
                                         Margin="10">
                                 <TextBlock Text="Name" Style="{StaticResource WhiteText}"/>
-                                <TextBox x:Name="ZoneName" Style="{StaticResource DataEntry}"></TextBox>
+                                <TextBox x:Name="ZoneName"
+                                         Style="{StaticResource DataEntry}"
+                                         Text="{Binding SelectedController.SelectedZone.Name, Mode=TwoWay}"/>
 
                                 <TextBlock Text="Description" Style="{StaticResource WhiteText}"/>
                                 <TextBox x:Name="ZoneDescription" Style="{StaticResource DataEntry}"
                                          MinLines="2"
                                          MaxLines="10"
                                          TextWrapping="Wrap"
-                                         VerticalScrollBarVisibility="Auto"></TextBox>
+                                         VerticalScrollBarVisibility="Auto"
+                                         Text="{Binding SelectedController.SelectedZone.Description}"/>
                             </StackPanel>
 
                         </Grid>                        

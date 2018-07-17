@@ -13,6 +13,7 @@ namespace SprinklerConfig.ViewModel
     {
         private readonly Controller controller;
         private ObservableCollection<Zone> zones;
+        private int selectedZoneIndex = -1;
 
         /// <summary>
         /// Gets the underlying controller model
@@ -77,6 +78,31 @@ namespace SprinklerConfig.ViewModel
         /// Command to set the zone count
         /// </summary>
         public ICommand ZoneCountSet { get; }
+
+        /// <summary>
+        /// Get or Set the current selected index of controller view models
+        /// </summary>
+        public int SelectedZoneIndex
+        {
+            get => selectedZoneIndex;
+            set
+            {
+                if (value < -1 || value >= Zones.Count)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                selectedZoneIndex = value;
+
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(SelectedZone));
+            }
+        }
+
+        /// <summary>
+        /// Gets the currently selected controller view model
+        /// </summary>
+        public Zone SelectedZone => selectedZoneIndex >= 0 ? Zones[selectedZoneIndex] : null;
 
         public ControllerVM() : this(new Controller())
         { }

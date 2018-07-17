@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SprinklerConfig.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,16 @@ namespace SprinklerConfig
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private PropertyVM propertyVM;
+
+        internal MainWindow(PropertyVM property)
         {
             InitializeComponent();
+
+            propertyVM = property;
+            propertyVM.SelectedIndex = 0;
+            propertyVM.SelectedController.SelectedZoneIndex = 0;
+            DataContext = propertyVM;
         }
     }
 }

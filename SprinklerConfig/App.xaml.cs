@@ -21,8 +21,8 @@ namespace SprinklerConfig
             var sprinklerRepository = new SprinklerRepository();
             var propertyVM = new PropertyVM(sprinklerRepository);
 
-            //var w = new MainWindow();
-            var w = new TestWindow(propertyVM);
+            var w = new MainWindow(propertyVM);
+            //var w = new TestWindow(propertyVM);
             w.Show();
         }
     }
