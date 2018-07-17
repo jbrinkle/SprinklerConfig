@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace SprinklerConfig.Model
 {
-    internal class Controller
+    internal class Zone
     {
+        public int ID { get; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
 
-        public List<Zone> Zones { get; }
-
-        public Controller()
+        public Zone(int id, string name = null, string description = null)
         {
-            Zones = new List<Zone>();
+            ID = id;
+            Name = name;
+            Description = description;
         }
     }
 }

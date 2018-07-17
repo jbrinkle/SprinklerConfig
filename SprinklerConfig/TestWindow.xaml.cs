@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SprinklerConfig.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,13 @@ namespace SprinklerConfig
             InitializeComponent();
 
             this.DataContext = dataContext;
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var vm = ((PropertyVM)DataContext).SelectedController;
+
+            vm?.ZoneCountSetCommand.Execute(int.Parse(ZoneCount.Text));
         }
     }
 }

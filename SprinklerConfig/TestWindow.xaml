@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SprinklerConfig"
         xmlns:viewModels="clr-namespace:SprinklerConfig.ViewModel"
+        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
         Background="#444466"
         Title="Test Window" Height="450" Width="800">
@@ -36,6 +37,25 @@
               Text="{Binding SelectedController.Description, Mode=TwoWay, FallbackValue='0'}" 
               Margin="5" />
             <!--<Button Content="Delete" Click="{x:Bind Organization.Delete}" Margin="5" />-->
+            <ListBox x:Name="ZoneList"
+                     ItemsSource="{Binding SelectedController.Zones, Mode=OneWay, diag:PresentationTraceSources.TraceLevel=High}"
+                     MinHeight="200"
+                     Margin="5">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding ID, Mode=OneWay}" Margin="5,0"/>
+                            <TextBlock Text="{Binding Name, Mode=OneWay}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Content="Add zone" Command="{Binding SelectedController.ZoneCountIncrementCommand}"/>
+            <Button Content="Rem zone" Command="{Binding SelectedController.ZoneCountDecrementCommand}"/>
+            <TextBox x:Name="ZoneCount"
+                     Text="{Binding SelectedController.Zones.Count, Mode=OneWay}"
+                     LostFocus="TextBox_LostFocus"/>
+
         </StackPanel>
     </Grid>
 </Window>
