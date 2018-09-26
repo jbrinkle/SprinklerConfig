@@ -14,9 +14,12 @@ namespace SprinklerConfig.Model
 
         public List<Zone> Zones { get; }
 
+        public List<Program> Programs { get; }
+
         public Controller()
         {
             Zones = new List<Zone>();
+            Programs = new List<Program>();
         }
     }
 }

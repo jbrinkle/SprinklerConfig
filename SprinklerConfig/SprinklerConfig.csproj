@@ -54,11 +54,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Program.cs" />
+    <Compile Include="Model\ProgramZoneRunTime.cs" />
     <Compile Include="Model\SprinklerRepository.cs" />
     <Compile Include="Model\Zone.cs" />
     <Compile Include="TestWindow.xaml.cs">
       <DependentUpon>TestWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ProgramVM.cs" />
     <Compile Include="ViewModel\ControllerVM.cs" />
     <Compile Include="ViewModel\DelegateCommand.cs" />
     <Compile Include="ViewModel\PropertyVM.cs" />
